@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class User(AbstractUser):
     '''Переопределенная модель пользователя.
     Добавлены поля bio и confirmation code,
@@ -19,7 +20,7 @@ class User(AbstractUser):
         blank=False,
         verbose_name='Адрес электронной почты'
     )
-    password = models.CharField(max_length=128 , blank=True, null=True)
+    password = models.CharField(max_length=128, blank=True, null=True)
     bio = models.TextField(
         max_length=280,
         blank=True,
@@ -39,4 +40,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
-
