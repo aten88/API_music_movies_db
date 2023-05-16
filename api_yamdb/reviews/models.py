@@ -20,6 +20,11 @@ class User(AbstractUser):
         blank=False,
         verbose_name='Адрес электронной почты'
     )
+    first_name = models.CharField(
+        max_length=40, blank=True, verbose_name='Имя')
+    last_name = models.CharField(
+        max_length=40, blank=True, verbose_name='Фамилия'
+    )
     password = models.CharField(max_length=128, blank=True, null=True)
     bio = models.TextField(
         max_length=280,
