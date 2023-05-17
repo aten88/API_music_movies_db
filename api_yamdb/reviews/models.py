@@ -110,14 +110,14 @@ class Review(models.Model):
         related_name='reviews',
         verbose_name='Произведение'
     )
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Пользователь'
     )
     text = models.TextField(verbose_name='Текст отзыва')
-    rating = models.PositiveIntegerField(
+    score = models.PositiveIntegerField(
         choices=((i, str(i)) for i in range(1, 11)),
         verbose_name='Рейтинг'
     )
@@ -132,7 +132,7 @@ class Review(models.Model):
 
     def __str__(self) -> str:
         ''' Переопределенный метод строкового представления '''
-        return f'Отзыв {self.user.username} к произведению {self.title}'
+        return f'Отзыв {self.author.username} к произведению {self.title}'
 
 
 class Comment(models.Model):
@@ -143,7 +143,7 @@ class Comment(models.Model):
         related_name='comments',
         verbose_name='Отзыв'
     )
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='comments',
@@ -161,4 +161,4 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         ''' Переопределенный метод строкового представления '''
-        return f'Комментарий {self.user.username} к отзыву {self.review}'
+        return f'Комментарий {self.author.username} к отзыву {self.review}'
