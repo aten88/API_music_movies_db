@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, filters
 
 from api.serializers import CategorySerializer, GenreSerializer
 from reviews.models import Title, Category, Genre
@@ -12,12 +12,16 @@ class CreateListDestroyViewSet(mixins.CreateModelMixin,
 
 
 class CategoryViewSet(CreateListDestroyViewSet):
-    lookup_field = 'slug'
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    lookup_field = 'slug'
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
 
 class GenreViewSet(CreateListDestroyViewSet):
-    lookup_field = 'slug'
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    lookup_field = 'slug'
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
