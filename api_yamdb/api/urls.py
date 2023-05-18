@@ -7,6 +7,6 @@ router.register(r'reviews', ReviewViewSet)
 router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
-    path('api/v1', include(routers.urls)),
+    path('api/v1/', include(routers.urls)),
 
 ]
