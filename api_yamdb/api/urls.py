@@ -1,9 +1,8 @@
 from django.urls import include, path
 from rest_framework import routers
-from django.urls import include, path
 
-from api.views import send_confirmation_code, get_jwt_token
-from api.views import ReviewViewSet, CommentViewSet
+from api.views import (send_confirmation_code, get_jwt_token,
+                       ReviewViewSet, CommentViewSet)
 
 router = routers.DefaultRouter()
 router.register(

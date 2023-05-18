@@ -8,11 +8,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import AccessToken
 
-from api.serializers import ReviewSerializer, CommentSerializer
+from api.serializers import (ReviewSerializer, CommentSerializer,
+                             RegisterDataSerializer, TokenSerializer)
 from reviews.models import Review, Comment
 from api.permissions import IsReviewOwnerOrReadOnly
 from api.utils import gen_send_mail
-from api.serializers import RegisterDataSerializer, TokenSerializer
 
 User = get_user_model()
 
