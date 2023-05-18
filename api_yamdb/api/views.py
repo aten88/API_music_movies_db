@@ -26,7 +26,7 @@ def send_confirmation_code(request):
     serializer.save()
     username = serializer.validated_data['username']
     email = serializer.validated_data['email']
-    user = User.objects.get_or_create(username=username, email=email)[0]
+    user = get_object_or_404(User, username=username, email=email)
     confirmation_code = default_token_generator.make_token(user)
     gen_send_mail(email, confirmation_code)
     user.confirmation_code = confirmation_code
