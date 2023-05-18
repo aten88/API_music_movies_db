@@ -20,5 +20,6 @@ class RegisterDataSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.Serializer):
+    '''Сериализатор для получения токена jwt.'''
     confirmation_code = serializers.CharField()
     username = serializers.CharField()
