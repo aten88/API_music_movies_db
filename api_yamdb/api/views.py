@@ -1,3 +1,4 @@
+from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import get_object_or_404
@@ -7,10 +8,25 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import AccessToken
 
+from api.serializers import ReviewSerializer, CommentSerializer
+from reviews.models import Review, Comment
+from api.permissions import IsReviewOwnerOrReadOnly
 from api.utils import gen_send_mail
 from api.serializers import RegisterDataSerializer, TokenSerializer
 
 User = get_user_model()
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [IsReviewOwnerOrReadOnly, ]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsReviewOwnerOrReadOnly, ]
 
 
 @api_view(['POST'])
@@ -50,5 +66,3 @@ def get_jwt_token(request):
             == serializer.validated_data['confirmation_code']):
         token = AccessToken.for_user(user)
         return Response({"token": str(token)}, status=status.HTTP_200_OK)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
