@@ -1,29 +1,27 @@
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, mixins, filters
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.shortcuts import get_object_or_404
+
+from rest_framework import viewsets, mixins, filters, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import AccessToken
 
 from api.serializers import (CategorySerializer,
                              GenreSerializer,
                              TitleSerializer,
-                             TitleWriteSerializer)
+                             TitleWriteSerializer,
+                             ReviewSerializer,
+                             CommentSerializer,
+                             RegisterDataSerializer,
+                             TokenSerializer)
 from api.filters import TitlesFilter
-from api.permissions import IsAdminOrReadOnly
-from reviews.models import Title, Category, Genre
+from api.permissions import IsAdminOrReadOnly, IsReviewOwnerOrReadOnly
+from reviews.models import Title, Category, Genre, Review, Comment
 
-from rest_framework import viewsets
-from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import AccessToken
-
-from api.serializers import (ReviewSerializer, CommentSerializer,
-                             RegisterDataSerializer, TokenSerializer)
-from reviews.models import Review, Comment
-from api.permissions import IsReviewOwnerOrReadOnly
 from api.utils import gen_send_mail
 
 User = get_user_model()
@@ -66,7 +64,7 @@ def get_jwt_token(request):
             == serializer.validated_data['confirmation_code']):
         token = AccessToken.for_user(user)
         return Response({"token": str(token)}, status=status.HTTP_200_OK)
-      
+
 
 class CreateListDestroyViewSet(mixins.CreateModelMixin,
                                mixins.ListModelMixin,
