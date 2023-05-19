@@ -103,7 +103,7 @@ class Title(models.Model):
 
 
 class Review(models.Model):
-    ''' Модель отзыва к произведению '''
+    ''' Модель отзыва к произведению.'''
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
@@ -125,18 +125,18 @@ class Review(models.Model):
         auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
-        ''' Сортируем по дате создания в обр порядке '''
+        ''' Сортируем по дате создания в обр порядке.'''
         ordering = ['-created_at']
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
 
     def __str__(self) -> str:
-        ''' Переопределенный метод строкового представления '''
+        ''' Переопределенный метод строкового представления.'''
         return f'Отзыв {self.author.username} к произведению {self.title}'
 
 
 class Comment(models.Model):
-    ''' Модель комментария к отзыву '''
+    ''' Модель комментария к отзыву.'''
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
@@ -154,11 +154,11 @@ class Comment(models.Model):
         auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
-        ''' Сортируем по дате создания '''
+        ''' Сортируем по дате создания.'''
         ordering = ['created_at']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
     def __str__(self) -> str:
-        ''' Переопределенный метод строкового представления '''
+        ''' Переопределенный метод строкового представления.'''
         return f'Комментарий {self.author.username} к отзыву {self.review}'
