@@ -42,6 +42,12 @@ class User(AbstractUser):
         verbose_name='Код подтверждения'
     )
 
+    def is_moderator(self):
+        return self.role == self.Role.MODERATOR
+
+    def is_admin(self):
+        return self.role == self.Role.ADMIN
+
     def __str__(self):
         return self.username
 

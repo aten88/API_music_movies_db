@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 
 from api.views import (send_confirmation_code, get_jwt_token,
-                       ReviewViewSet, CommentViewSet)
+                       ReviewViewSet, CommentViewSet, UserViewSet)
 
 router = routers.DefaultRouter()
 router.register(
@@ -13,6 +13,7 @@ router.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentViewSet, basename='comment'
 )
+router.register(r'users', UserViewSet)
 
 v1_auth_patterns = [
     path('signup/', send_confirmation_code),
