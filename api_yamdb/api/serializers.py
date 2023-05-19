@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from reviews.models import Review, Comment
 from django.contrib.auth import get_user_model
+
+from reviews.models import Review, Comment
 
 User = get_user_model()
 
@@ -8,13 +9,13 @@ User = get_user_model()
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = '__all__'
+        fields = ('title', 'author', 'text', 'score', 'created_at')
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ('review', 'author', 'text', 'created_at')
 
 
 class InitialRegisterDataSerializer(serializers.Serializer):
