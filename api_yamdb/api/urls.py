@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from api.views import CategoryViewSet, GenreViewSet, TitleViewSet
 from api.views import (send_confirmation_code, get_jwt_token,
-                       ReviewViewSet, CommentViewSet)
+                       ReviewViewSet, CommentViewSet, UserViewSet)
 
 
 router_v1 = DefaultRouter()
@@ -18,6 +18,7 @@ router_v1.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentViewSet, basename='comment'
 )
+router_v1.register(r'users', UserViewSet)
 
 auth_patterns_v1 = [
     path('signup/', send_confirmation_code),

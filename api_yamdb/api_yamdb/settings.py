@@ -120,6 +120,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'PAGE_SIZE': 5
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -129,5 +130,4 @@ NOREPLY_SERVICE_EMAIL = 'noreply@yamdb.app'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
-
 }
