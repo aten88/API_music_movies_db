@@ -1,3 +1,15 @@
+from django.db.models import Avg
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, mixins, filters
+
+from api.serializers import (CategorySerializer,
+                             GenreSerializer,
+                             TitleSerializer,
+                             TitleWriteSerializer)
+from api.filters import TitlesFilter
+from api.permissions import IsAdminOrReadOnly
+from reviews.models import Title, Category, Genre
+
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -15,18 +27,6 @@ from api.permissions import IsReviewOwnerOrReadOnly
 from api.utils import gen_send_mail
 
 User = get_user_model()
-
-
-class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
-    permission_classes = [IsReviewOwnerOrReadOnly, ]
-
-
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [IsReviewOwnerOrReadOnly, ]
 
 
 @api_view(['POST'])
@@ -66,3 +66,53 @@ def get_jwt_token(request):
             == serializer.validated_data['confirmation_code']):
         token = AccessToken.for_user(user)
         return Response({"token": str(token)}, status=status.HTTP_200_OK)
+      
+
+class CreateListDestroyViewSet(mixins.CreateModelMixin,
+                               mixins.ListModelMixin,
+                               mixins.DestroyModelMixin,
+                               viewsets.GenericViewSet):
+    pass
+
+
+class CategoryViewSet(CreateListDestroyViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'slug'
+    permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+
+
+class GenreViewSet(CreateListDestroyViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    lookup_field = 'slug'
+    permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.annotate(rating=Avg('reviews__score'))
+    serializer_class = TitleSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitlesFilter
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'partial_update'):
+            return TitleWriteSerializer
+        return TitleSerializer
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [IsReviewOwnerOrReadOnly, ]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsReviewOwnerOrReadOnly, ]
