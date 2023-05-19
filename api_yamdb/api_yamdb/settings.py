@@ -130,5 +130,4 @@ NOREPLY_SERVICE_EMAIL = 'noreply@yamdb.app'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
-
 }

@@ -18,7 +18,7 @@ router_v1.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentViewSet, basename='comment'
 )
-router.register(r'users', UserViewSet)
+router_v1.register(r'users', UserViewSet)
 
 auth_patterns_v1 = [
     path('signup/', send_confirmation_code),
