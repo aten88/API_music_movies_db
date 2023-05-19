@@ -9,13 +9,13 @@ User = get_user_model()
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = '__all__'
+        fields = ('title', 'author', 'text', 'score', 'created_at')
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ('review', 'author', 'text', 'created_at')
 
 
 class RegisterDataSerializer(serializers.ModelSerializer):
