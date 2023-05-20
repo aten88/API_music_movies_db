@@ -111,7 +111,7 @@ STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 AUTH_USER_MODEL = 'reviews.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': ['rest_framework.pagination.PageNumberPagination'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -120,7 +120,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'PAGE_SIZE': 5
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'

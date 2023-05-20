@@ -143,57 +143,8 @@ class GenreViewSet(CreateListDestroyViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.annotate(rating=Avg('reviews__score'))
-    serializer_class = TitleSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (DjangoFilterBackend,)
-    filterset_class = TitlesFilter
-
-    def get_serializer_class(self):
-        if self.action in ('create', 'partial_update'):
-            return TitleWriteSerializer
-        return TitleSerializer
-
-
-class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
-    permission_classes = [IsReviewOwnerOrReadOnly, ]
-
-
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [IsReviewOwnerOrReadOnly, ]
-
-
-class CreateListDestroyViewSet(mixins.CreateModelMixin,
-                               mixins.ListModelMixin,
-                               mixins.DestroyModelMixin,
-                               viewsets.GenericViewSet):
-    pass
-
-
-class CategoryViewSet(CreateListDestroyViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    lookup_field = 'slug'
-    permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
-
-
-class GenreViewSet(CreateListDestroyViewSet):
-    queryset = Genre.objects.all()
-    serializer_class = GenreSerializer
-    lookup_field = 'slug'
-    permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
-
-
-class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.annotate(rating=Avg('reviews__score'))
+    queryset = Title.objects.annotate(
+        rating=Avg('reviews__score')).order_by('name')
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
