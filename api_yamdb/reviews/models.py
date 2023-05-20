@@ -42,6 +42,9 @@ class User(AbstractUser):
         verbose_name='Код подтверждения'
     )
 
+    class Meta:
+        ordering = ['username']
+
     def is_moderator(self):
         return self.role == self.Role.MODERATOR
 
@@ -61,6 +64,7 @@ class Category(models.Model):
     slug = models.SlugField(max_length=50, unique=True)
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
@@ -77,6 +81,7 @@ class Genre(models.Model):
     slug = models.SlugField(max_length=50, unique=True)
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
 
@@ -101,6 +106,7 @@ class Title(models.Model):
     )
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
 
