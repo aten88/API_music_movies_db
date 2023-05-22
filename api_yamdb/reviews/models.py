@@ -133,14 +133,20 @@ class Review(models.Model):
         choices=((i, str(i)) for i in range(1, 11)),
         verbose_name='Рейтинг'
     )
-    created_at = models.DateTimeField(
+    pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
         ''' Сортируем по дате создания в обр порядке.'''
-        ordering = ['-created_at']
+        ordering = ['-pub_date']
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author'],
+                name='unique_review_for_title'
+            )
+        ]
 
     def __str__(self) -> str:
         ''' Переопределенный метод строкового представления.'''
@@ -162,12 +168,12 @@ class Comment(models.Model):
         verbose_name='Пользователь'
     )
     text = models.TextField(verbose_name='Текст комментария')
-    created_at = models.DateTimeField(
+    pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
         ''' Сортируем по дате создания.'''
-        ordering = ['created_at']
+        ordering = ['pub_date']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
