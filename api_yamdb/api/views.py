@@ -3,7 +3,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, mixins, filters, status
+
+from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -18,16 +19,8 @@ from api.serializers import (CategorySerializer, GenreSerializer,
                              InitialRegisterDataSerializer)
 from api.filters import TitlesFilter
 from api.permissions import IsAdminOrReadOnly, IsReviewOwnerOrReadOnly, IsAdmin
-from reviews.models import Title, Category, Genre, Review, Comment
-from api.utils import gen_send_mail
-
-
-class CreateListDestroyViewSet(mixins.CreateModelMixin,
-                               mixins.ListModelMixin,
-                               mixins.DestroyModelMixin,
-                               viewsets.GenericViewSet):
-    pass
-
+from reviews.models import Title, Category, Genre, Review
+from api.utils import gen_send_mail, CreateListDestroyViewSet
 
 User = get_user_model()
 
@@ -86,7 +79,7 @@ def get_jwt_token(request):
 
 class UserViewSet(viewsets.ModelViewSet):
     '''Вью-функция для администрирования пользователей.
-    Доступ открыт только для админимтраторов и суперюзеров.
+    Доступ открыт только для администраторов и суперюзеров.
     Реализован поиск по полю username.
     Реализована возможность любому аутентифицированному
     пользователю просматривать и изменять данные своей учетной записи.'''
@@ -125,6 +118,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(CreateListDestroyViewSet):
+    '''Вьюсет категорий.'''
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
@@ -134,6 +128,7 @@ class CategoryViewSet(CreateListDestroyViewSet):
 
 
 class GenreViewSet(CreateListDestroyViewSet):
+    ''''Вьюсет жанров.'''
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     lookup_field = 'slug'
@@ -143,6 +138,7 @@ class GenreViewSet(CreateListDestroyViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
+    '''Вьюсет произведений.'''
     queryset = Title.objects.annotate(
         rating=Avg('reviews__score')).order_by('name')
     serializer_class = TitleSerializer
@@ -157,6 +153,7 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    '''Вьюсет отзывов.'''
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewOwnerOrReadOnly, ]
 
@@ -170,6 +167,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    '''Вьюсет комментариев к отзывам.'''
     serializer_class = CommentSerializer
     permission_classes = [IsReviewOwnerOrReadOnly, ]
 

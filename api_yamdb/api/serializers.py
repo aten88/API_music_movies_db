@@ -10,20 +10,21 @@ User = get_user_model()
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
+    '''Сериализатор для категорий.'''
     class Meta:
         model = Category
         fields = ('name', 'slug')
 
 
 class GenreSerializer(serializers.ModelSerializer):
-
+    '''Сериализатор для жанров.'''
     class Meta:
         model = Genre
         fields = ('name', 'slug')
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    '''Сериализатор для произведений.'''
     rating = serializers.IntegerField(read_only=True)
     genre = GenreSerializer(many=True, source='genres')
     category = CategorySerializer()
@@ -35,6 +36,7 @@ class TitleSerializer(serializers.ModelSerializer):
 
 
 class TitleWriteSerializer(serializers.ModelSerializer):
+    '''Сериализатор для записи произведений.'''
     category = serializers.SlugRelatedField(
         queryset=Category.objects, slug_field='slug')
     genre = serializers.SlugRelatedField(
@@ -51,6 +53,7 @@ class TitleWriteSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    '''Сериализатор для отзывов.'''
     author = serializers.SlugRelatedField(
         slug_field='username', read_only=True)
 
@@ -69,6 +72,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    '''Сериализатор для комментариев.'''
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username')
 
@@ -79,7 +83,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class InitialRegisterDataSerializer(serializers.Serializer):
     '''Сериализатор входящих данных пользователя.
-    Реализует повторную отправку кода подтвержджения для
+    Реализует повторную отправку кода подтверждения для
     существующего юзера.'''
     username = serializers.CharField()
     email = serializers.EmailField()

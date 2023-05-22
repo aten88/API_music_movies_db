@@ -4,6 +4,7 @@ from reviews.models import Title
 
 
 class TitlesFilter(filters.FilterSet):
+    '''Кастомный фильтр произведений.'''
     category = filters.CharFilter(
         field_name='category__slug', lookup_expr='contains')
     genre = filters.CharFilter(

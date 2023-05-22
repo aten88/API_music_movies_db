@@ -10,6 +10,7 @@ class User(AbstractUser):
     '''
 
     class Role(models.TextChoices):
+        '''Класс роли пользователя.'''
         USER = 'user', 'Пользователь'
         MODERATOR = 'moderator', 'Модератор'
         ADMIN = 'admin', 'Администратор'
@@ -43,19 +44,24 @@ class User(AbstractUser):
     )
 
     class Meta:
+        ''' Сортируем по имени пользователя.'''
         ordering = ['username']
 
     def is_moderator(self):
+        '''Метод типа пользователя'''
         return self.role == self.Role.MODERATOR
 
     def is_admin(self):
+        '''Метод типа пользователя'''
         return self.role == self.Role.ADMIN
 
     def __str__(self):
+        ''' Переопределенный метод строкового представления.'''
         return self.username
 
 
 class Category(models.Model):
+    '''Модель Категорий.'''
     name = models.CharField(
         max_length=256,
         verbose_name='Название категории',
@@ -64,15 +70,18 @@ class Category(models.Model):
     slug = models.SlugField(max_length=50, unique=True)
 
     class Meta:
+        ''' Сортируем по имени категории.'''
         ordering = ['name']
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
     def __str__(self):
+        ''' Переопределенный метод строкового представления.'''
         return self.name
 
 
 class Genre(models.Model):
+    '''Модель Жанров.'''
     name = models.CharField(
         max_length=256,
         verbose_name='Название жанра',
@@ -81,15 +90,18 @@ class Genre(models.Model):
     slug = models.SlugField(max_length=50, unique=True)
 
     class Meta:
+        ''' Сортируем по имени жанра.'''
         ordering = ['name']
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
 
     def __str__(self):
+        ''' Переопределенный метод строкового представления.'''
         return self.name
 
 
 class Title(models.Model):
+    '''Модель Произведений.'''
     name = models.CharField(
         max_length=256,
         verbose_name='Название произведения')
@@ -106,11 +118,13 @@ class Title(models.Model):
     )
 
     class Meta:
+        ''' Сортируем по имени.'''
         ordering = ['name']
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
 
     def __str__(self):
+        ''' Переопределенный метод строкового представления.'''
         return self.name
 
 
