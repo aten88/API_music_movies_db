@@ -1,7 +1,8 @@
 from django.core import mail
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, filters
 
 from api_yamdb.settings import NOREPLY_SERVICE_EMAIL
+from api.permissions import IsAdminOrReadOnly
 
 
 def gen_send_mail(to_email, conf_code):
@@ -22,4 +23,7 @@ class CreateListDestroyViewSet(mixins.CreateModelMixin,
                                mixins.ListModelMixin,
                                mixins.DestroyModelMixin,
                                viewsets.GenericViewSet):
-    pass
+    lookup_field = 'slug'
+    permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
