@@ -4,7 +4,7 @@ from reviews.models import User, Title, Category, Genre, Review
 
 
 @admin.register(User)
-class UserAdmi(admin.ModelAdmin):
+class UserAdmin(admin.ModelAdmin):
     list_display = (
         'pk', 'username', 'email', 'role'
     )
