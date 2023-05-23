@@ -37,11 +37,6 @@ class User(AbstractUser):
         default=Role.USER,
         verbose_name='Роль пользователя'
     )
-    # confirmation_code = models.CharField(
-    #     max_length=100,
-    #     blank=True,
-    #     verbose_name='Код подтверждения'
-    # )
 
     class Meta:
         ''' Сортируем по имени пользователя.'''
