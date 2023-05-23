@@ -37,20 +37,22 @@ class User(AbstractUser):
         default=Role.USER,
         verbose_name='Роль пользователя'
     )
-    confirmation_code = models.CharField(
-        max_length=100,
-        blank=True,
-        verbose_name='Код подтверждения'
-    )
+    # confirmation_code = models.CharField(
+    #     max_length=100,
+    #     blank=True,
+    #     verbose_name='Код подтверждения'
+    # )
 
     class Meta:
         ''' Сортируем по имени пользователя.'''
         ordering = ['username']
 
+    @property
     def is_moderator(self):
         '''Метод типа пользователя'''
         return self.role == self.Role.MODERATOR
 
+    @property
     def is_admin(self):
         '''Метод типа пользователя'''
         return self.role == self.Role.ADMIN

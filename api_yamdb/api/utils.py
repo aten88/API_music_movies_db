@@ -1,5 +1,4 @@
 from django.core import mail
-
 from rest_framework import viewsets, mixins
 
 from api_yamdb.settings import NOREPLY_SERVICE_EMAIL

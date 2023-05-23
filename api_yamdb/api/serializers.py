@@ -114,8 +114,8 @@ class UserSerializer(serializers.ModelSerializer):
     '''Сериализатор данных пользователя.'''
 
     class Meta:
-        fields = ("username", "email", "first_name",
-                  "last_name", "bio", "role")
+        fields = ('username', 'email', 'first_name',
+                  'last_name', 'bio', 'role')
         model = User
 
 
@@ -125,7 +125,7 @@ class UserProfileChangeSerializer(serializers.ModelSerializer):
     запрещено изменение поля role.'''
 
     class Meta:
-        fields = ("username", "email", "first_name",
-                  "last_name", "bio", "role")
+        fields = ('username', 'email', 'first_name',
+                  'last_name', 'bio', 'role')
         model = User
         read_only_fields = ('role', )

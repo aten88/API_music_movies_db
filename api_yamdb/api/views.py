@@ -36,14 +36,12 @@ def send_confirmation_code(request):
     существующего в базе данных, код активации высылается на почту повторно.'''
     serializer = InitialRegisterDataSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    username = serializer.data['username']
-    email = serializer.data['email']
+    username = serializer.validated_data['username']
+    email = serializer.validated_data['email']
     if User.objects.filter(username=username, email=email).exists():
         user = User.objects.get(username=username, email=email)
         confirmation_code = default_token_generator.make_token(user)
         gen_send_mail(user.email, confirmation_code)
-        user.confirmation_code = confirmation_code
-        user.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     serializer = RegisterDataSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -53,8 +51,6 @@ def send_confirmation_code(request):
     user = get_object_or_404(User, username=username, email=email)
     confirmation_code = default_token_generator.make_token(user)
     gen_send_mail(email, confirmation_code)
-    user.confirmation_code = confirmation_code
-    user.save()
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -70,8 +66,9 @@ def get_jwt_token(request):
         username=serializer.validated_data['username']
     )
 
-    if (user.confirmation_code
-            == serializer.validated_data['confirmation_code']):
+    if default_token_generator.check_token(
+        user, serializer.validated_data["confirmation_code"]
+    ):
         token = AccessToken.for_user(user)
         return Response({"token": str(token)}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -104,13 +101,12 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer_class=UserProfileChangeSerializer
     )
     def user_profile_change(self, request):
-        user = request.user
         if request.method == 'GET':
-            serializer = self.get_serializer(user)
+            serializer = self.get_serializer(request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         if request.method == 'PATCH':
             serializer = self.get_serializer(
-                user, data=request.data, partial=True)
+                request.user, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
