@@ -30,7 +30,7 @@ class CreateListDestroyViewSet(mixins.CreateModelMixin,
 
 
 class CurrentTitleDefault():
-    '''Класс для получения поля title из запроса пользователя.'''
+    """Класс для получения поля title из запроса пользователя."""
     requires_context = True
 
     def __call__(self, serializer_field):
