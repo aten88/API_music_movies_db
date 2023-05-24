@@ -165,7 +165,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    """|Модель комментария к отзыву."""
+    """Модель комментария к отзыву."""
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
