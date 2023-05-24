@@ -2,8 +2,10 @@ from datetime import datetime
 
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from reviews.models import Category, Genre, Title, Review, Comment
+from api.utils import CurrentTitleDefault
 
 
 User = get_user_model()
@@ -55,20 +57,20 @@ class TitleWriteSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     '''Сериализатор для отзывов.'''
     author = serializers.SlugRelatedField(
-        slug_field='username', read_only=True)
+        slug_field='username', read_only=True,
+        default=serializers.CurrentUserDefault())
+    title = serializers.CharField(
+        read_only=True, default=CurrentTitleDefault())
 
     class Meta:
         model = Review
-        fields = ('id', 'author', 'text', 'score', 'pub_date')
-
-    def validate(self, data):
-        if self.context['request'].method == 'POST':
-            author = self.context['request'].user
-            title = self.context['view'].kwargs.get('title_id')
-            if Review.objects.filter(author=author, title=title).exists():
-                raise serializers.ValidationError(
-                    'Нельзя дважды оценить одно произведение')
-        return data
+        read_only = ['id']
+        fields = ('id', 'author', 'text', 'score', 'pub_date', 'title')
+        validators = [UniqueTogetherValidator(
+            queryset=Review.objects.all(),
+            fields=['title', 'author'],
+            message='Нельзя дважды оценить одно произведение'
+        )]
 
 
 class CommentSerializer(serializers.ModelSerializer):
