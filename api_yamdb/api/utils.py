@@ -27,3 +27,14 @@ class CreateListDestroyViewSet(mixins.CreateModelMixin,
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
+
+
+class CurrentTitleDefault():
+    """Класс для получения поля title из запроса пользователя."""
+    requires_context = True
+
+    def __call__(self, serializer_field):
+        return serializer_field.context['view'].kwargs.get('title_id')
+
+    def __repr__(self):
+        return '%s()' % self.__class__.__name__
