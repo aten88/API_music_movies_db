@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    '''Кастомный пермишен Админа.'''
+    """Кастомный пермишен Админа."""
     def has_permission(self, request, view):
         return (request.method in permissions.SAFE_METHODS
                 or (request.user.is_authenticated
@@ -10,7 +10,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 
 class IsReviewOwnerOrReadOnly(permissions.BasePermission):
-    '''Кастомный пермишен отзыва.'''
+    """Кастомный пермишен отзыва."""
     def has_permission(self, request, view):
         return (request.user.is_authenticated
                 or request.method in permissions.SAFE_METHODS)
@@ -22,7 +22,7 @@ class IsReviewOwnerOrReadOnly(permissions.BasePermission):
 
 
 class IsAdmin(permissions.BasePermission):
-    '''Кастомный пермишен Админа.'''
+    """Кастомный пермишен Админа."""
     def has_permission(self, request, view):
         return request.user.is_authenticated and (
             request.user.is_admin or request.user.is_superuser)
